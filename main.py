@@ -198,6 +198,7 @@ def load_extra_path_config(yaml_path):
 
 
 if __name__ == "__main__":
+    start_time = time.perf_counter()
     if args.temp_directory:
         temp_dir = os.path.join(os.path.abspath(args.temp_directory), "temp")
         logging.info(f"Setting temp directory to: {temp_dir}")
@@ -223,6 +224,8 @@ if __name__ == "__main__":
     if args.extra_model_paths_config:
         for config_path in itertools.chain(*args.extra_model_paths_config):
             load_extra_path_config(config_path)
+
+    logging.info("---------init_custom_nodes-----------")
 
     nodes.init_extra_nodes(init_custom_nodes=not args.disable_all_custom_nodes)
 
@@ -251,6 +254,9 @@ if __name__ == "__main__":
     if args.quick_test_for_ci:
         exit(0)
 
+
+    end_time = time.perf_counter()
+    logging.info("Startup time: {:.2f} seconds".format(end_time - start_time))
     call_on_start = None
     if args.auto_launch:
         def startup_server(scheme, address, port):

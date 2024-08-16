@@ -1969,7 +1969,7 @@ def load_custom_node(module_path: str, ignore=set(), module_parent="custom_nodes
         sp = os.path.splitext(module_path)
         module_name = sp[0]
     try:
-        logging.debug("Trying to load custom node {}".format(module_path))
+        logging.info("Trying to load custom node {}".format(module_path))
         if os.path.isfile(module_path):
             module_spec = importlib.util.spec_from_file_location(module_name, module_path)
             module_dir = os.path.split(module_path)[0]
@@ -1979,7 +1979,9 @@ def load_custom_node(module_path: str, ignore=set(), module_parent="custom_nodes
 
         module = importlib.util.module_from_spec(module_spec)
         sys.modules[module_name] = module
+        logging.info("start module_spec.loader.exec_module {}".format(module_path))
         module_spec.loader.exec_module(module)
+        logging.info("end module_spec.loader.exec_module {}".format(module_path))
 
         if hasattr(module, "WEB_DIRECTORY") and getattr(module, "WEB_DIRECTORY") is not None:
             web_dir = os.path.abspath(os.path.join(module_dir, getattr(module, "WEB_DIRECTORY")))
