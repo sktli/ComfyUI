@@ -1,6 +1,7 @@
 import torch
 from enum import Enum
 import logging
+import time
 
 from comfy import model_management
 from .ldm.models.autoencoder import AutoencoderKL, AutoencodingEngine
@@ -519,10 +520,12 @@ def load_checkpoint(config_path=None, ckpt_path=None, output_vae=True, output_cl
     return (model, clip, vae)
 
 def load_checkpoint_guess_config(ckpt_path, output_vae=True, output_clip=True, output_clipvision=False, embedding_directory=None, output_model=True, model_options={}, te_model_options={}):
+    start_time = time.perf_counter()
     sd = comfy.utils.load_torch_file(ckpt_path)
     out = load_state_dict_guess_config(sd, output_vae, output_clip, output_clipvision, embedding_directory, output_model, model_options, te_model_options=te_model_options)
     if out is None:
         raise RuntimeError("ERROR: Could not detect model type of: {}".format(ckpt_path))
+    logging.info("Loaded checkpoint in {:.2f} seconds".format(time.perf_counter() - start_time))
     return out
 
 def load_state_dict_guess_config(sd, output_vae=True, output_clip=True, output_clipvision=False, embedding_directory=None, output_model=True, model_options={}, te_model_options={}):

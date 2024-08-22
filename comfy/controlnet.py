@@ -35,6 +35,8 @@ import comfy.ldm.cascade.controlnet
 import comfy.cldm.mmdit
 import comfy.ldm.hydit.controlnet
 import comfy.ldm.flux.controlnet
+import comfy.ldm.flux.controlnet_xlabs
+import time
 
 
 def broadcast_image_to(tensor, target_batch_size, batched_number):
@@ -488,6 +490,7 @@ def convert_mistoline(sd):
 
 
 def load_controlnet(ckpt_path, model=None):
+    start_time = time.perf_counter()
     controlnet_data = comfy.utils.load_torch_file(ckpt_path, safe_load=True)
     if 'after_proj_list.18.bias' in controlnet_data.keys(): #Hunyuan DiT
         return load_controlnet_hunyuandit(controlnet_data)
