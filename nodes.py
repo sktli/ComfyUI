@@ -511,6 +511,7 @@ class CheckpointLoader:
     FUNCTION = "load_checkpoint"
 
     CATEGORY = "advanced/loaders"
+    DEPRECATED = True
 
     def load_checkpoint(self, config_name, ckpt_name):
         config_path = folder_paths.get_full_path("configs", config_name)
@@ -2104,6 +2105,7 @@ def init_builtin_extra_nodes():
         "nodes_hunyuan.py",
         "nodes_flux.py",
         "nodes_lora_extract.py",
+        "nodes_torch_compile.py",
     ]
 
     import_failed = []
